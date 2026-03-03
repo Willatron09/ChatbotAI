@@ -34,29 +34,29 @@
 <category><pattern> WHAT COCKTAILS ARE THE LEAST BEGINNER FRIENDLY</pattern>
   <template>Cocktails that are the least beginer friendly are usually those that contain very strong spirits, are bitter, are dry, or those that have very little mixer. Some cocktails that are as described are; Negroni, Dry Martini, or the Old Fasioned.</template></category>
 
-<category><pattern> WHAT TYPES OF COCKTAILS ARE THERE</pattern>
-  <template><srai>Most cocktails fall into one of these categories; Spirit-forwarded, Sour, Highball, Tropical, Bitter, Sparkkling, or Dessert.</srai></template></category>
+<category><pattern> WHAT ARE THE DIFFERENT TYPES OF COCKTAILS </pattern>
+  <template>Most cocktails fall into one of these categories; Spirit-forwarded, Sour, Highball, Tropical, Bitter, Sparkkling, or Dessert.</template></category>
 
 <category><pattern> WHAT IS A SPIRIT-FORWARDED COCKTAIL</pattern>
-  <template><srai>They contain mostly alcohol and are usually not very sweet. Examples include Dry Martini, Manhattan, and Old Fashioned.</srai></template></category>
+  <template>They contain mostly alcohol and are usually not very sweet. Examples include Dry Martini, Manhattan, and Old Fashioned.</template></category>
 
 <category><pattern> WHAT IS A SOUR COCKTAIL</pattern>
-  <template><srai>These usually contain spirits, citric flavours, and sweeteners. Examples include Whiskey Sour, Margarita, and Daiquiri.</srai></template></category>
+  <template>These usually contain spirits, citric flavours, and sweeteners. Examples include Whiskey Sour, Margarita, and Daiquiri.</template></category>
 
 <category><pattern> WHAT IS A HIGHBALL COCKTAIL</pattern>
-  <template><srai>These usually contain spirits and fizzy mixers that are simple and refreshing. Examples include Gin and Tonic, Moscow Mule, and Mojito.</srai></template></category>
+  <template>These usually contain spirits and fizzy mixers that are simple and refreshing. Examples include Gin and Tonic, Moscow Mule, and Mojito.</template></category>
 
 <category><pattern> WHAT IS A TROPICAL COCKTAIL</pattern>
-  <template><srai>These aare often sweet and primarily contain rum, but other spirits can be used too. Examples include Pina Colada, Mai Tai, and Zombie.</srai></template></category>
+  <template>These are often sweet and primarily contain rum, but other spirits can be used too. Examples include Pina Colada, Mai Tai, and Zombie.</template></category>
 
 <category><pattern> WHAT IS A BITTER COCKTAIL</pattern>
-  <template><srai>These usually consist of herbal and bitter flavours. Examples include Negroni and Aperol Spritz.</srai></template></category>
+  <template>These usually consist of herbal and bitter flavours. Examples include Negroni and Aperol Spritz.</template></category>
 
 <category><pattern> WHAT IS A SPARKLING COCKTAIL</pattern>
-  <template><srai>These usually are made with sparkling wines like Champagne or Prosecco. Examples include French 75, Bellini, and Mimosa.</srai></template></category>
+  <template>These usually are made with sparkling wines like Champagne or Prosecco. Examples include French 75, Bellini, and Mimosa.</template></category>
 
 <category><pattern> WHAT IS A DESSERT COCKTAIL</pattern>
-  <template><srai>These are usually much sweeter and richer containing cream or liquers. Examples include Mudslide, White Russian, and Chocolate Martini.</srai></template></category>
+  <template>These are usually much sweeter and richer containing cream or liquers. Examples include Mudslide, White Russian, and Chocolate Martini.</template></category>
 
 <category><pattern> BYE </pattern>
   <template>#0$Bye! Nice talking to you. You take care now.</template></category>
