@@ -7,13 +7,38 @@
 import aiml
 import wikipedia
 import csv
+import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from nltk.sem import Expression
+from nltk.inference import ResolutionProver
+from tensorflow import keras
+from tensorflow.keras.utils import load_img, img_to_array
+import numpy as np
+read_expr = Expression.fromstring
+
+#  Initialise Knowledgebase. 
+import pandas
+kb=[]
+data = pandas.read_csv('logical-kb.csv', header=None)
+[kb.append(read_expr(row)) for row in data[0]]
+
+for expr in kb:
+    if read_expr(f"-({expr})") in kb:
+        print("ERROR: Knowledge base contains contradictions!  Re-evaluate your knowledge base before rerunning")
+        exit()
+
+print("Logical knowledge base loaded successfully. No contradictions found.")
+
+# above does not catch inferred contradictions.
 
 # Create a Kernel object. 
 kern = aiml.Kernel()
 kern.setTextEncoding(None)
 kern.bootstrap(learnFiles="mybot-basic.xml")
+
+image_model = keras.models.load_model("alcohol_classifier.h5")
+class_names = ['beer', 'whiskey', 'wine']
 
 def load_qa_kb(csv_path: str):
     questions, answers = [], []
@@ -45,6 +70,20 @@ class SimilarityQA:
         if best_score >= threshold:
             return self.answers[best_idx], best_score, self.questions[best_idx]
         return None
+
+def predict_drink(image_path: str):
+    img = load_img(image_path, target_size=(128, 128))
+    img_array = img_to_array(img)
+    
+    img_array = np.expand_dims(img_array, axis=0)
+
+    prediction = image_model.predict(img_array, verbose=0)[0]
+
+    predicted_index = int(np.argmax(prediction))
+    predicted_class = class_names[predicted_index]
+    confidence = float(prediction[predicted_index])
+
+    return predicted_class, confidence, prediction
 
 # Load KB once at startup
 kb_questions, kb_answers = load_qa_kb("cocktail_QA_high_paraphrase.csv")
@@ -105,6 +144,55 @@ while True:
             else:
                 print("I did not get that, please try again.")
 
+        # Here are the processing of the new logical component:
+        elif cmd == 31: # if input pattern is "I know that * is *"
+            object,subject=params[1].split(' is ')
+            expr=read_expr(subject + '(' + object + ')')
+            # Build expression: Predicate(Object)
+            expr = read_expr(f"{subject}({object})")
+
+            # Contradiction check: would KB entail the negation of this new fact?
+            neg_expr = read_expr(f"-({subject}({object}))")
+
+            if ResolutionProver().prove(neg_expr, kb, verbose=False):
+                print(f"Error: That would contradict what I already know. I cannot add {expr}.")
+            else:
+                kb.append(expr)
+                print("OK, I will remember that", object, "is", subject)
+
+        elif cmd == 32: # if the input pattern is "check that * is *"
+            object,subject=params[1].split(' is ')
+            expr=read_expr(subject + '(' + object + ')')
+            answer=ResolutionProver().prove(expr, kb, verbose=True)
+            if answer:
+               print('Correct.')
+            else:
+                neg_expr = read_expr(f"-({subject}({object}))")
+                if ResolutionProver().prove(neg_expr, kb, verbose=False):
+                    print('Incorrect.') 
+                else:
+                   print("Sorry I don't know.")
+        
+        elif cmd == 40:
+            image_path = input("Enter image path: ").strip()
+
+            if os.path.exists(image_path):
+
+                predicted_class, confidence, prediction = predict_drink(image_path)
+
+                if confidence < 0.6:
+                    print(f"I'm not overly confident, but this image might be {predicted_class}.")
+                else:
+                    print(f"I think this image is {predicted_class}.")
+
+                print(f"Confidence: {confidence:.2f}")
+                print("Probabilities:")
+
+                for i, name in enumerate(class_names):
+                    print(f"{name}: {prediction[i]:.4f}")
+
+            else:
+                print("Sorry, I could not load or classify that image.")
     else:
         # AIML gave a normal answer -> print it
         # If AIML returned empty, also try similarity
