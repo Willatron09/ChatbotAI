@@ -78,45 +78,34 @@
 
 <category> <pattern> CHEERS * </pattern>
   <template>Sure mate.</template></category>
+
 <!--Image Classification-->
-<category>
-    <pattern>CLASSIFY IMAGE</pattern>
-    <template>#40$classify image</template>
-</category>
+<category><pattern>CLASSIFY IMAGE</pattern>
+  <template>#40$classify image</template></category>
 
-<category>
-    <pattern>IDENTIFY IMAGE</pattern>
-    <template>#40$identify image</template>
-</category>
+<category><pattern>IDENTIFY IMAGE</pattern>
+  <template>#40$identify image</template></category>
 
-<category>
-    <pattern>WHAT DRINK IS THIS IMAGE</pattern>
-    <template>#40$what drink is this image</template>
-</category>
+<category><pattern>WHAT DRINK IS THIS IMAGE</pattern>
+  <template>#40$what drink is this image</template></category>
 
-<category>
-    <pattern>ANALYSE IMAGE</pattern>
-    <template>#40$analyse image</template>
-</category>
+<category><pattern>ANALYSE IMAGE</pattern>
+  <template>#40$analyse image</template></category>
+
 <!-- Logic input -->
-<category>
-<pattern> I KNOW THAT * IS *</pattern>
-<template>
-#31$
-<star index="1"/>
-is
-<star index="2"/>
-</template>
-</category>
-<category>
-<pattern> CHECK THAT * IS *</pattern>
-<template>
-#32$
-<star index="1"/>
-is
-<star index="2"/>
-</template>
-</category>
+<category><pattern> I KNOW THAT * IS *</pattern>
+  <template>#31$<star index="1"/>is<star index="2"/></template></category>
+
+<category><pattern> CHECK THAT * IS *</pattern>
+<template>#32$<star index="1"/>is<star index="2"/></template></category>
+
+<category><pattern>WHAT DOES * TASTE LIKE</pattern>
+  <template>#71$<star/></template></category>
+
+<!--- Nutrition API -->
+<category><pattern>HOW MANY CALORIES ARE IN *</pattern>
+  <template>#60$<star/></template></category>
+
 <!--- Wikipedia API -->
 <category><pattern> WHAT IS A * </pattern>
   <template>#1$<star index="1"/></template></category>

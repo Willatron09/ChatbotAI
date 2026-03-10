@@ -10,3 +10,23 @@ ContainsGin (Martini)
 NonAlcoholic(x) -> -ContainsAlcohol(x)
 NonAlcoholic(VirginMojito)
 NonAlcoholic(x) -> -Cocktail(x)
+
+"Taste(Mojito,Refreshing)"
+"Taste(Mojito,Minty)"
+"Taste(Mojito,Citrusy)"
+
+"Taste(Margarita,Sour)"
+"Taste(Margarita,Citrus)"
+"Taste(Margarita,Salty)"
+
+"Taste(Martini,Dry)"
+"Taste(Martini,Strong)"
+
+"Taste(Negroni,Bitter)"
+"Taste(Negroni,Herbal)"
+
+"Taste(Daiquiri,Sour)"
+"Taste(Daiquiri,Sweet)"
+
+"Taste(OldFashioned,Bitter)"
+"Taste(OldFashioned,Sweet)"

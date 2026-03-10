@@ -8,6 +8,8 @@ import aiml
 import wikipedia
 import csv
 import os
+import requests
+import pandas
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.sem import Expression
@@ -15,10 +17,10 @@ from nltk.inference import ResolutionProver
 from tensorflow import keras
 from tensorflow.keras.utils import load_img, img_to_array
 import numpy as np
+
 read_expr = Expression.fromstring
 
 #  Initialise Knowledgebase. 
-import pandas
 kb=[]
 data = pandas.read_csv('logical-kb.csv', header=None)
 [kb.append(read_expr(row)) for row in data[0]]
@@ -85,6 +87,46 @@ def predict_drink(image_path: str):
 
     return predicted_class, confidence, prediction
 
+
+
+API_KEY = "28ccaa0076ec4c91b8cb7b7387c11361"
+
+def get_nutrition(food):
+    url = "https://api.spoonacular.com/recipes/guessNutrition"
+    params = {
+        "title": food,
+        "apiKey": API_KEY
+    }
+    response = requests.get(url, params=params)
+    if response.status_code != 200:
+        return None
+    data = response.json()
+    return {
+        "calories": data["calories"]["value"],
+        "fat": data["fat"]["value"],
+        "protein": data["protein"]["value"],
+        "carbs": data["carbs"]["value"]
+    }
+
+def get_tastes_for_drink(drink_name):
+    tastes = []
+
+    for fact in kb:
+        fact_str = str(fact)
+
+        if fact_str.startswith("Taste(") and fact_str.endswith(")"):
+            inside = fact_str[6:-1]  # remove "Taste(" and ")"
+            parts = inside.split(",")
+
+            if len(parts) == 2:
+                kb_drink = parts[0].strip()
+                kb_taste = parts[1].strip()
+
+                if kb_drink.lower() == drink_name.lower():
+                    tastes.append(kb_taste)
+
+    return tastes
+
 # Load KB once at startup
 kb_questions, kb_answers = load_qa_kb("cocktail_QA_high_paraphrase.csv")
 sim_qa = SimilarityQA(kb_questions, kb_answers)
@@ -133,6 +175,46 @@ while True:
                 else:
                     print("Sorry, I do not know that. Be more specific!")
 
+        elif cmd == 60:
+            drink = params[1]
+            nutrition = get_nutrition(drink)
+
+            if nutrition:
+                print(f"A {drink} contains about {nutrition['calories']} calories.")
+                print(f"Carbs: {nutrition['carbs']}g")
+                print(f"Fat: {nutrition['fat']}g")
+                print(f"Protein: {nutrition['protein']}g")
+            else:
+                print("Sorry, I couldn't find nutrition information.")
+
+        elif cmd == 71:
+            try:
+                drink = params[1].strip()
+
+                # remove common articles
+                for article in ["a ", "an ", "the "]:
+                    if drink.lower().startswith(article):
+                        drink = drink[len(article):]
+
+                drink = drink.capitalize()
+
+                tastes = get_tastes_for_drink(drink)
+
+                if tastes:
+                    if len(tastes) == 1:
+                        print(f"A {drink} tastes {tastes[0].lower()}.")
+                    elif len(tastes) == 2:
+                        print(f"A {drink} tastes {tastes[0].lower()} and {tastes[1].lower()}.")
+                    else:
+                        taste_list = ", ".join(t.lower() for t in tastes[:-1])
+                        print(f"A {drink} tastes {taste_list}, and {tastes[-1].lower()}.")
+                else:
+                    print(f"Sorry, I do not know what {drink} tastes like.")
+
+            except Exception as e:
+                print("DEBUG ERROR cmd71:", e)
+                print("Sorry, I could not understand that taste query.")
+
         elif cmd == 99:
             # AIML didn't match -> try similarity KB
             sim_result = sim_qa.answer(userInput, threshold=0.35)
@@ -163,7 +245,7 @@ while True:
         elif cmd == 32: # if the input pattern is "check that * is *"
             object,subject=params[1].split(' is ')
             expr=read_expr(subject + '(' + object + ')')
-            answer=ResolutionProver().prove(expr, kb, verbose=True)
+            answer=ResolutionProver().prove(expr, kb, verbose=False)
             if answer:
                print('Correct.')
             else:
