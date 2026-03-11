@@ -92,6 +92,10 @@
 <category><pattern>ANALYSE IMAGE</pattern>
   <template>#40$analyse image</template></category>
 
+<!--Object Detection-->
+<category><pattern>DETECT OBJECTS</pattern>
+  <template>#41$detect objects</template></category>
+
 <!-- Logic input -->
 <category><pattern> I KNOW THAT * IS *</pattern>
   <template>#31$<star index="1"/>is<star index="2"/></template></category>

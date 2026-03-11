@@ -16,6 +16,9 @@ from nltk.sem import Expression
 from nltk.inference import ResolutionProver
 from tensorflow import keras
 from tensorflow.keras.utils import load_img, img_to_array
+from ultralytics import YOLO
+import cv2
+from collections import Counter
 import numpy as np
 
 read_expr = Expression.fromstring
@@ -41,6 +44,8 @@ kern.bootstrap(learnFiles="mybot-basic.xml")
 
 image_model = keras.models.load_model("alcohol_classifier.h5")
 class_names = ['beer', 'whiskey', 'wine']
+
+detect_model = YOLO("yolov8n.pt")
 
 def load_qa_kb(csv_path: str):
     questions, answers = [], []
@@ -87,7 +92,47 @@ def predict_drink(image_path: str):
 
     return predicted_class, confidence, prediction
 
+def detect_drink_objects(image_path: str):
+    results = detect_model(image_path, verbose=False)
+    result = results[0]
 
+    annotated_img = result.plot()
+    output_path = "detected_drinks.jpg"
+    cv2.imwrite(output_path, annotated_img)
+
+    detected_labels = []
+    names = result.names
+
+    if result.boxes is not None and len(result.boxes) > 0:
+        cls_list = result.boxes.cls.tolist()
+        conf_list = result.boxes.conf.tolist()
+
+        for cls_id, conf in zip(cls_list, conf_list):
+            label = names[int(cls_id)]
+
+            # map YOLO classes into your chatbot drink classes
+            if label == "wine glass":
+                detected_labels.append("glasses of wine")
+            elif label == "bottle":
+                detected_labels.append("bottles of wine")
+
+
+    if len(detected_labels) == 0:
+        return "I could not detect any wine objects in that image.", output_path, annotated_img
+
+    counts = Counter(detected_labels)
+
+    parts = []
+    for label in ["bottles of wine", "glasses of wine"]:
+        if label in counts:
+            count = counts[label]
+            if count == 1:
+                parts.append(f"1 {label}")
+            else:
+                parts.append(f"{count} {label}")
+
+    summary = "I detected: " + ", ".join(parts) + "."
+    return summary, output_path, annotated_img
 
 API_KEY = "28ccaa0076ec4c91b8cb7b7387c11361"
 
@@ -275,6 +320,21 @@ while True:
 
             else:
                 print("Sorry, I could not load or classify that image.")
+
+        elif cmd == 41:
+            image_path = input("Enter image path: ").strip()
+
+            if os.path.exists(image_path):
+                summary, output_path, annotated_img = detect_drink_objects(image_path)
+                print(summary)
+                print(f"Annotated image saved as {output_path}")
+
+                cv2.imshow("Drink detections", annotated_img)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+            else:
+                print("Sorry, I could not load that image.")    
+
     else:
         # AIML gave a normal answer -> print it
         # If AIML returned empty, also try similarity
