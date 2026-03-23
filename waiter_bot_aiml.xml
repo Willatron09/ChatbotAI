@@ -1,0 +1,133 @@
+<aiml version="1.0.1" encoding="UTF-8">
+
+<!-- Greetings and Politeness -->
+<category> <pattern> HELLO </pattern>
+  <template>Hello! How are you?</template> </category>
+
+<category> <pattern> HELLO * </pattern>
+  <template><srai>HELLO</srai></template> </category>
+
+<category> <pattern> HI </pattern>
+  <template><srai>HELLO</srai></template> </category>
+
+<category> <pattern> HI * </pattern>
+  <template><srai>HELLO</srai></template> </category>
+
+<category> <pattern> HOW ARE YOU </pattern>
+  <template>I'm functioning within normal parameters, thanks for asking.</template></category>
+
+<category><pattern> I AM FINE </pattern>
+  <template>That's good to know. What would you like to discuss about?</template></category>
+
+<category><pattern> I AM GOOD </pattern>
+  <template>That's good to know. What would you like to discuss about?</template></category>
+
+<category><pattern> WHAT IS YOUR FAVOURITE COCKTAIL </pattern>
+  <template>It would have to be the Moscow Mule. I love the Vodka mixed with Ginger beer, which is my favourite soft drink.</template></category>
+
+<category><pattern> WHAT IS YOUR LEAST FAVOURITE COCKTAIL </pattern>
+  <template>I really dislike the Bloody Mary. I cannot get past the tomato juice and Worcestershire sauce.</template></category>
+
+<category><pattern> WHAT COCKTAIL WOULD YOU RECOMMEND</pattern>
+  <template>I would recommend a cocktail that is not too strong or bitter and preferably something sweet or refreshing. Cocktails that fit these descriptions are; Mojito, Strawberry Daiquiri, Pina Colada, or Sex on the Beach.</template></category>
+
+<category><pattern> WHAT COCKTAILS ARE THE LEAST BEGINNER FRIENDLY</pattern>
+  <template>Cocktails that are the least beginer friendly are usually those that contain very strong spirits, are bitter, are dry, or those that have very little mixer. Some cocktails that are as described are; Negroni, Dry Martini, or the Old Fasioned.</template></category>
+
+<category><pattern> WHAT ARE THE DIFFERENT TYPES OF COCKTAILS </pattern>
+  <template>Most cocktails fall into one of these categories; Spirit-forwarded, Sour, Highball, Tropical, Bitter, Sparkkling, or Dessert.</template></category>
+
+<category><pattern> WHAT IS A SPIRIT-FORWARDED COCKTAIL</pattern>
+  <template>They contain mostly alcohol and are usually not very sweet. Examples include Dry Martini, Manhattan, and Old Fashioned.</template></category>
+
+<category><pattern> WHAT IS A SOUR COCKTAIL</pattern>
+  <template>These usually contain spirits, citric flavours, and sweeteners. Examples include Whiskey Sour, Margarita, and Daiquiri.</template></category>
+
+<category><pattern> WHAT IS A HIGHBALL COCKTAIL</pattern>
+  <template>These usually contain spirits and fizzy mixers that are simple and refreshing. Examples include Gin and Tonic, Moscow Mule, and Mojito.</template></category>
+
+<category><pattern> WHAT IS A TROPICAL COCKTAIL</pattern>
+  <template>These are often sweet and primarily contain rum, but other spirits can be used too. Examples include Pina Colada, Mai Tai, and Zombie.</template></category>
+
+<category><pattern> WHAT IS A BITTER COCKTAIL</pattern>
+  <template>These usually consist of herbal and bitter flavours. Examples include Negroni and Aperol Spritz.</template></category>
+
+<category><pattern> WHAT IS A SPARKLING COCKTAIL</pattern>
+  <template>These usually are made with sparkling wines like Champagne or Prosecco. Examples include French 75, Bellini, and Mimosa.</template></category>
+
+<category><pattern> WHAT IS A DESSERT COCKTAIL</pattern>
+  <template>These are usually much sweeter and richer containing cream or liquers. Examples include Mudslide, White Russian, and Chocolate Martini.</template></category>
+
+<category><pattern> BYE </pattern>
+  <template>#0$Bye! Nice talking to you. You take care now.</template></category>
+
+<category><pattern> GOODBYE </pattern>
+  <template><srai>BYE</srai></template></category>
+
+<category><pattern> EXIT </pattern>
+  <template><srai>BYE</srai></template></category>
+
+<category> <pattern> THANKS </pattern>
+  <template>You are welcome.</template></category>
+
+<category> <pattern> THANK YOU </pattern>
+  <template><srai>THANKS</srai></template></category>
+
+<category> <pattern> CHEERS </pattern>
+  <template>Sure mate.</template></category>
+
+<category> <pattern> CHEERS * </pattern>
+  <template>Sure mate.</template></category>
+
+<!--Image Classification-->
+<category><pattern>CLASSIFY IMAGE</pattern>
+  <template>#40$classify image</template></category>
+
+<category><pattern>IDENTIFY IMAGE</pattern>
+  <template>#40$identify image</template></category>
+
+<category><pattern>WHAT DRINK IS THIS IMAGE</pattern>
+  <template>#40$what drink is this image</template></category>
+
+<category><pattern>ANALYSE IMAGE</pattern>
+  <template>#40$analyse image</template></category>
+
+<!--Object Detection-->
+<category><pattern>DETECT OBJECTS</pattern>
+  <template>#41$detect objects</template></category>
+
+<!-- Logic input -->
+<category><pattern>I KNOW THAT * IS *</pattern>
+    <template>#31$<star index="1"/> is <star index="2"/></template></category>
+
+<category><pattern>CHECK THAT * IS *</pattern>
+    <template>#32$<star index="1"/> is <star index="2"/></template></category>
+
+<category><pattern>WHAT DOES * TASTE LIKE</pattern>
+  <template>#71$<star/></template></category>
+
+<!--- Nutrition API -->
+<category><pattern>HOW MANY CALORIES ARE IN *</pattern>
+  <template>#60$<star/></template></category>
+
+<!--- Wikipedia API -->
+<category><pattern> WHAT IS A * </pattern>
+  <template>#1$<star index="1"/></template></category>
+
+<category><pattern> WHAT IS AN * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> WHAT IS * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> DEFINE * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<category><pattern> WHO IS * </pattern>
+  <template><srai>WHAT IS A <star/></srai></template></category>
+
+<!-- Default reaction -->
+<category><pattern> * </pattern>
+  <template>#99$<star index="1"/></template></category>
+
+</aiml>
